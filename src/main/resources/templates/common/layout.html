@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html
+xmlns:th      = "http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+<head>
+<meta charset="UTF-8" />
+<link th:href="@{/css/application.css}"  type="text/css" rel="stylesheet"></link>
+<title>BooksApp</title>
+</head>
+<body>
+<header class="header">
+  <h1>BooksApp</h1>
+</header>
+<main class="container">
+  <nav class="nav-side">
+    <a th:href="@{'/books'}">本一覧</a>
+  </nav>
+  <article class="main-content">
+    <ul>
+    <li th:each="error : ${#fields.detailedErrors()}">
+      <span th:text="${error.message}">Error message</span>
+    </li>
+    </ul>
+    <div layout:fragment="content">
+      <p>Default layout content</p>
+    </div>
+  </article>
+</main>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html
+xmlns:th      = "http://www.thymeleaf.org" 
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorator="/common/layout"
+>
+<head>
+  <title>Books App</title>
+</head>
+<body>
+  <div layout:fragment="content">
+    <h2>books</h2>
+    <table>
+      <tr>
+        <th>タイトル</th>
+        <th>著者</th>
+        <th>説明</th>
+        <th colspan="3">
+      </tr>
+      <tr th:each="book : ${bookList}">
+        <td th:text="${book.title}"></td>
+        <td th:text="${book.author}"></td>
+        <td th:text="${book.description}"></td>
+        <td><a th:href="@{'/books/' + ${book.id}}">詳細</a></td>
+        <td>
+          <form th:action="@{'/books/' + ${book.id}}" th:method="delete">
+            <input type="submit" value="削除" />
+          </form>
+        </td>
+        <td><a th:href="@{'/books/' + ${book.id} + '/edit'}">編集</a></td>
+        <td th:text="${book.updatedAt}"></td>
+      </tr>
+    </table>
+    <a th:href="@{'/books'(page=0)}" >最初</a>
+    <span th:if="${displayedPages.get(0) > 0 }">...</span>
+    <span th:each="page : ${displayedPages}" >
+      <span th:if="${pageInfo.getNumber() eq page}">
+        <span th:text="${page + 1}"></span>
+      </span>
+      <span th:if="${pageInfo.getNumber() ne page}">
+        <a th:href="@{'/books'(page=${page})}"  th:text="${page + 1}"></a>
+      </span>
+    </span>
+    <span th:if="${displayedPages.get(displayedPages.size()-1) < pageInfo.getTotalPages()-1 }">...</span>
+    <a th:href="@{'/books'(page=${pageInfo.getTotalPages()-1})}">最後</a>
+    <br>
+    <a th:href="@{'/books/new'}">新規作成</a>
+  </div>
+</body>
+</html>
