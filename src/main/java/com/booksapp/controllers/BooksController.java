@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.booksapp.controllers.forms.AccountForm;
 import com.booksapp.controllers.forms.BookForm;
 import com.booksapp.controllers.helpers.PageHelper;
 import com.booksapp.domain.model.Book;
@@ -30,10 +31,10 @@ import com.booksapp.domain.service.BookService;
 @Controller
 public class BooksController {
     @Autowired
-    BookService bookService;
+    private BookService bookService;
 
     @Autowired
-    ModelMapper modelMapper;
+    private ModelMapper modelMapper;
 
     @Value("${pageSize}")
     private int pageSize;
@@ -46,9 +47,6 @@ public class BooksController {
         PageRequest pageReq = PageRequest.of(page, pageSize, Sort.by("updatedAt").descending());
         Page<Book> pageInfo = bookService.findAll(pageReq);
         List<Book> bookList = pageInfo.getContent();
-        for(var book : bookList) {
-            System.out.println(book);
-        }
 
         model.addAttribute("bookList", bookList);
         model.addAttribute("pageInfo", pageInfo);
@@ -67,8 +65,6 @@ public class BooksController {
     @PostMapping("/books")
     public String create(@Validated BookForm bookForm, BindingResult result, Model model) {
         model.addAttribute("bookForm", bookForm);
-        System.out.println(bookForm);
-        System.out.println(result);
         if(result.hasErrors()) {
             return "/books/new";
         }
@@ -97,7 +93,7 @@ public class BooksController {
     }
 
     @GetMapping("/books/{id}/edit")
-    public String edit(@PathVariable("id") int id, @ModelAttribute BookForm bookForm, Model model) {
+    public String edit(@PathVariable("id") int id, @ModelAttribute AccountForm bookForm, Model model) {
         Book book = bookService.findById(id);
         modelMapper.map(book, bookForm);
         model.addAttribute("bookId", id);
@@ -106,7 +102,7 @@ public class BooksController {
     }
 
     @PatchMapping("/books/{id}")
-    public String update(@PathVariable("id") int id,  @ModelAttribute @Validated BookForm bookForm, BindingResult result){
+    public String update(@PathVariable("id") int id,  @ModelAttribute @Validated AccountForm bookForm, BindingResult result){
         if(result.hasErrors()) {
             return "/books/new";
         }

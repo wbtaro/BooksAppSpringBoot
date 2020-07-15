@@ -1,19 +1,17 @@
 package com.booksapp.controllers.forms;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 
 import lombok.Data;
 
 @Data
 public class BookForm {
-    @NotEmpty(message = "タイトルは入力必須です")
-    @Email
+    @NotBlank(message = "タイトルを入力してください")
     private String title;
 
-    @NotBlank(message = "筆者は入力必須です")
+    @NotBlank(message = "筆者を入力してください")
     private String author;
+
     private String description;
 
     public String toString() {

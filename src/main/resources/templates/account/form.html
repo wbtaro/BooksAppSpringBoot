@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html
+xmlns:th      = "http://www.thymeleaf.org" 
+>
+<body th:fragment="form (accountForm)" th:object=${accountForm}>
+  <label>Email</label>
+  <input type="text" th:field="*{email}">
+  <br>
+  <label>パスワード</label>
+  <input type="password" th:field="*{password.password}">
+  <br>
+  <label>ユーザー名</label>
+  <input type="text" th:field="*{name}">
+  <br>
+  <label>自己紹介</label>
+  <textarea th:field="*{description}"></textarea>
+  <br>
+  <input type="submit" value="登録">
+</body>
+</html>

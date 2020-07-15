@@ -11,10 +11,15 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 <body>
 <header class="header">
   <h1>BooksApp</h1>
+  <a href="/logout">ログアウト</a>
+  <a href="/mypage">マイページ</a>
 </header>
 <main class="container">
   <nav class="nav-side">
-    <a th:href="@{'/books'}">本一覧</a>
+    <ul>
+      <li><a th:href="@{'/books'}">本一覧</a></li>
+      <li><a th:href="@{'/users'}">ユーザー一覧</a></li>
+    </ul>
   </nav>
   <article class="main-content">
     <ul>

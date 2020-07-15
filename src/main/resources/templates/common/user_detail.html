@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html
+xmlns:th="http://www.thymeleaf.org" 
+>
+<head>
+  <meta charset="UTF-8">
+  <title>Books App</title>
+</head>
+<body th:fragment="user_detail (account, isMypage)" th:object=${account}>
+    <h2 th:text="*{name}"></h2>
+    <h3>email</h3>
+    <p th:text="*{email}">email</p>
+    <h3>自己紹介</h3>
+    <p th:text="*{description}">自己紹介</p>
+</body>
+</html>
