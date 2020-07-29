@@ -16,43 +16,58 @@ import com.booksapp.domain.repository.AccountRepository;
 public class AccountServiceImpl implements AccountService {
     @Autowired
     private AccountRepository accountRepository;
-    
+
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
-    
+ 
     @Override
     public Page<Account> findAll(Pageable pageable){
         return accountRepository.findAll(pageable);
     }
-    
+
     @Override
-    public void insertOne(Account account) {
-        if(account.getRole() == null) {
-            account.setRole("USER");
-        }
-        
-        if(account.getCreatedAt() == null) {
-            account.setCreatedAt(LocalDateTime.now(ZoneOffset.UTC));
-        }
-
-        if(account.getPassword().isEmpty()) {
-            String password = accountRepository.findById(account.getId()).get().getPassword();
-            account.setPassword(password);
-        }else {
-            account.setPassword(passwordEncoder.encode(account.getPassword()));
-        }
-
+    public Account insertOne(Account account) {
+        account.setRole("USER");
+        account.setCreatedAt(LocalDateTime.now(ZoneOffset.UTC));
         account.setUpdatedAt(LocalDateTime.now(ZoneOffset.UTC));
+        account.setPassword(passwordEncoder.encode(account.getPassword()));
+
         accountRepository.save(account);
+        
+        return account;
     }
-    
+
+    @Override
+    public Account updateOne(Account account) {
+        Account oldAccount = accountRepository.findById(account.getId()).get();
+        Account newAccount = new Account();
+
+        newAccount.setId(oldAccount.getId());
+        newAccount.setEmail(oldAccount.getEmail());
+        newAccount.setCreatedAt(oldAccount.getCreatedAt());
+
+        newAccount.setName(account.getName());
+        newAccount.setDescription(account.getDescription());
+
+        if(account.getPassword() == null) {
+            newAccount.setPassword(oldAccount.getPassword());
+        }else {
+            newAccount.setPassword(passwordEncoder.encode(account.getPassword()));
+        }
+
+        newAccount.setUpdatedAt(LocalDateTime.now(ZoneOffset.UTC));
+        accountRepository.save(newAccount);
+        
+        return newAccount;
+    }
+
     @Override
     public Account findByEmail(String email) {
         return accountRepository.findByEmail(email);
     }
-    
+
     @Override
     public Account findById(int id) {
-        return accountRepository.findById(id).get();
+        return accountRepository.findById(id).orElse(null);
     }
 }

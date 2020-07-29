@@ -20,10 +20,10 @@ import com.booksapp.domain.service.AccountService;
 public class AccountController {
     @Autowired
     private ModelMapper modelMapper;
-    
+
     @Autowired
     private AccountService accountService;
-   
+
     @GetMapping("/signup")
     public String createForm(@ModelAttribute AccountForm AccountForm) {
         return "/account/signup";
@@ -32,6 +32,10 @@ public class AccountController {
     @PostMapping("/signup")
     public String create(@ModelAttribute @Validated AccountForm accountForm, BindingResult result, Model model) {
         if(result.hasErrors()) {
+            return "/account/signup";
+        }
+
+        if(accountForm.getPassword().getPassword().isEmpty()) {
             return "/account/signup";
         }
 
@@ -45,18 +49,20 @@ public class AccountController {
     public String edit(@ModelAttribute AccountForm accountForm, Model model, Principal principal) {
         Account account = accountService.findByEmail(principal.getName());
         modelMapper.map(account, accountForm);
-        
+
         return "/account/edit";
     }
-    
+
     @PostMapping("/account")
-    public String update(@ModelAttribute @Validated AccountForm accountForm, BindingResult result, Model model) {
+    public String update(@ModelAttribute @Validated AccountForm accountForm, BindingResult result, Model model, Principal principal) {
         if(result.hasErrors()) {
             return "/account/edit";
         }
 
+        int id = accountService.findByEmail(principal.getName()).getId();
         Account account = modelMapper.map(accountForm, Account.class);
-        accountService.insertOne(account);
+        account.setId(id);
+        accountService.updateOne(account);
 
         return "redirect:/mypage";
     }

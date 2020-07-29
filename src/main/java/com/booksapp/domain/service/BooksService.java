@@ -7,14 +7,14 @@ import org.springframework.stereotype.Service;
 import com.booksapp.domain.model.Book;
 
 @Service
-public interface BookService {
+public interface BooksService {
     Page<Book> findAll(Pageable pageable);
     
-    void insertOne(Book book);
+    Book insertOne(Book book);
     
     Book findById(int id);
     
     void deleteById(int id);
     
-    void updateOne(Book book);
+    Book updateOne(Book book);
 }

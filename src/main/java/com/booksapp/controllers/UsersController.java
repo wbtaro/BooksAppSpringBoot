@@ -29,19 +29,20 @@ public class UsersController {
 
     @Value("${maxDisplayedPages}")
     private int maxDisplayedPages;
-    
+
     @GetMapping("/users/{id}")
     public String show(@PathVariable("id") int id, Model model) {
         Account account  = accountService.findById(id);
         model.addAttribute(account);
         return "/users/show";
-    }    
+    }
 
     @GetMapping("/users")
     public String index(Model model, @RequestParam(name = "page", defaultValue="0") int page, Principal principal) {
         PageRequest pageReq = PageRequest.of(page, pageSize, Sort.by("email").ascending());
         Page<Account> pageInfo = accountService.findAll(pageReq);
         List<Account> accountList = excludeLoginUser(pageInfo.getContent(), principal);
+        System.out.println(principal);
 
         model.addAttribute("accountList", accountList);
         model.addAttribute("pageInfo", pageInfo);

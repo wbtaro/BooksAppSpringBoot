@@ -1,5 +1,8 @@
 package com.booksapp.domain.service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,7 +12,7 @@ import com.booksapp.domain.model.Book;
 import com.booksapp.domain.repository.BookRepository;
 
 @Service
-public class BookServiceImpl implements BookService {
+public class BooksServiceImpl implements BooksService {
     @Autowired
     private BookRepository bookRepository;
     
@@ -19,13 +22,16 @@ public class BookServiceImpl implements BookService {
     }
     
     @Override
-    public void insertOne(Book book) {
+    public Book insertOne(Book book) {
+        book.setCreatedAt(LocalDateTime.now(ZoneOffset.UTC));
+        book.setUpdatedAt(LocalDateTime.now(ZoneOffset.UTC));
         bookRepository.save(book);
+        return book;
     }
     
     @Override
     public Book findById(int id) {
-        Book book = bookRepository.findById(id).get();
+        Book book = bookRepository.findById(id).orElse(null);
         return book;
     }
     
@@ -35,7 +41,11 @@ public class BookServiceImpl implements BookService {
     }
     
     @Override
-    public void updateOne(Book book) {
+    public Book updateOne(Book book) {
+        Book oldBook = findById(book.getId());
+        book.setUpdatedAt(LocalDateTime.now(ZoneOffset.UTC));
+        book.setCreatedAt(oldBook.getCreatedAt());
         bookRepository.save(book);
+        return book;
     }
 }

@@ -9,7 +9,8 @@ import com.booksapp.domain.model.Account;
 @Service
 public interface AccountService {
     Page<Account> findAll(Pageable pageable);
-    void insertOne(Account account);
+    Account insertOne(Account account);
+    Account updateOne(Account account);
     Account findByEmail(String email);
     Account findById(int id);
 }

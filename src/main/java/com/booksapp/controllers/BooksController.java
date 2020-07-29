@@ -1,7 +1,5 @@
 package com.booksapp.controllers;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -26,12 +24,12 @@ import com.booksapp.controllers.forms.AccountForm;
 import com.booksapp.controllers.forms.BookForm;
 import com.booksapp.controllers.helpers.PageHelper;
 import com.booksapp.domain.model.Book;
-import com.booksapp.domain.service.BookService;
+import com.booksapp.domain.service.BooksService;
 
 @Controller
 public class BooksController {
     @Autowired
-    private BookService bookService;
+    private BooksService bookService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -70,8 +68,6 @@ public class BooksController {
         }
 
         Book book = modelMapper.map(bookForm, Book.class);
-        book.setCreatedAt(LocalDateTime.now(ZoneOffset.UTC));
-        book.setUpdatedAt(LocalDateTime.now(ZoneOffset.UTC));
         bookService.insertOne(book);
 
         return "redirect:/books";
@@ -109,7 +105,6 @@ public class BooksController {
 
         Book book = modelMapper.map(bookForm, Book.class);
         book.setId(id);
-        book.setUpdatedAt(LocalDateTime.now(ZoneOffset.UTC));
         bookService.updateOne(book);
 
         return "redirect:/books";
